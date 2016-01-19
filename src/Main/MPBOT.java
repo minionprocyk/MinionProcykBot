@@ -86,17 +86,6 @@ public class MPBOT extends PircBot{
 				/*
 				 * I can write sender specific commands here...
 				 */
-				if(message.startsWith("!startTimer")){
-					timers = new Timer(1000*60*30, new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-							sendMessage(channel, sender, Messages.twitterAd);
-							
-						}
-					});
-					sendMessage(channel, sender, "!startTimer functionality is not available");
-				}else if(message.startsWith("!stopTimer")){
-					timers.stop();
-				}
 			}
 		}
 		
