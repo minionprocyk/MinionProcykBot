@@ -1,4 +1,4 @@
-package Main;
+package procyk.industries.mpbot;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -14,24 +14,15 @@ import java.util.HashMap;
  * check if that command is executed. if it is, know how to respond to the command.
  */
 public class Commands {
-	// build a hashmap of commands onLoad
 	public static HashMap<String, String> commands;
 
-	public Commands() {
-		init();
-	}
-
-	private void init() {
+	static
+	{
 		commands = new HashMap<String, String>();
-		loadCommands();
-	}
-
-	private void loadCommands() {
 		load(StaticVars.CommandsDirectoy, commands);
 	}
 
-
-	private void load(String fileName, HashMap<String, String> map) {
+	private static void load(String fileName, HashMap<String, String> map) {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(fileName));
 
@@ -83,7 +74,7 @@ public class Commands {
 					// command message way to long...
 					return false;
 				}
-				File file = new File("lib/Commands.txt");
+				File file = new File(StaticVars.CommandsDirectoy);
 				FileWriter fw;
 				try {
 					fw = new FileWriter(file.getAbsoluteFile(), true);
@@ -109,8 +100,7 @@ public class Commands {
 	 * as what's contained in the string 'command' variable then return true
 	 */
 	public static boolean commandExists(String command) {
-		String fileName = "lib/Commands.txt";
-		
+		String fileName = StaticVars.CommandsDirectoy;
 		try {
 
 			BufferedReader br = new BufferedReader(new FileReader(fileName));
@@ -129,6 +119,7 @@ public class Commands {
 
 			// split for windows platform only. '\r\n'
 			// use '\n' if used on a Unix system
+			//if you have one solid platform you can use everything.split(System.lineSeparator());
 			String[] delimitedFile = everything.split("\n");
 
 			for (int i = 0; i < delimitedFile.length; i++) {
@@ -151,10 +142,10 @@ public class Commands {
 		//when we find the matching string delete the entire line (try to only delete the one line and not rewrite the whole thing)
 		//return a response saying the string was deleted.
 		
-		
 		//create a temp file that writes the desired content. then renames the file to Commands.txt
+		String fileName = StaticVars.CommandsDirectoy;
 		try {
-			BufferedReader br = new BufferedReader(new FileReader("lib/Commands.txt"));
+			BufferedReader br = new BufferedReader(new FileReader(fileName));
 			
 			//read the entire file and skip the line that contains the command
 			System.out.println("Appending file to string builder");
@@ -167,13 +158,10 @@ public class Commands {
 				sbFile.append(line);
 				sbFile.append(System.lineSeparator());
 			}
-		//	System.out.println("New text file to be written | "+sbFile.toString());
 			br.close();
 			//write the contents of sbFile to the temp file
 			System.out.println("Removing "+command+" from hashmap");
 			commands.remove(command);
-			
-			System.out.println("Writing new Commands file");
 			FileWriter fw = new FileWriter("lib/Commands.txt");
 			BufferedWriter bw = new BufferedWriter(fw);
 			bw.write(sbFile.toString());

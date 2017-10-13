@@ -1,4 +1,4 @@
-package Main;
+package procyk.industries.mpbot;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,17 +14,18 @@ public class Messages {
 	private static ArrayList<Message> recentSentMessages;
 	private static ArrayList<Message> queMessage;
 	
-	public Messages(){
+	static
+	{
 		init();
 	}
-	private void init(){
+	private static void init(){
 		pastReadMessages = new ArrayList<Message>();
 		recentSentMessages = new ArrayList<Message>();
 		queMessage = new ArrayList<Message>();
 	}
 	public static void AddPastReadMessages(String sender, String message){
 		//hold the last 30 messages sent
-		//use fifo
+		//use fifo (First in first out)
 		if(pastReadMessages.size()>=30){
 			pastReadMessages.remove(0);
 		}
@@ -49,7 +50,6 @@ public class Messages {
 	}
 	private static void updateSentMessages(){
 		//write a routine that removes messages sent more than 30 seconds ago
-		
 		Iterator<Message> iMessage = recentSentMessages.iterator();
 		while(iMessage.hasNext()){
 			Message nextMessage = iMessage.next();

@@ -1,4 +1,4 @@
-package Main;
+package procyk.industries.mpbot;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -7,7 +7,8 @@ import java.io.IOException;
 public class Mods {
 	public static String[] Mods;
 	
-	public Mods(){
+	static
+	{
 		init();
 	}
 	
@@ -17,7 +18,7 @@ public class Mods {
 		}
 		return false;
 	}
-	private void init(){
+	private static void init(){
 		 try{
 				BufferedReader br = new BufferedReader(new FileReader(StaticVars.ModsDirectory)); 
 		        StringBuilder sb = new StringBuilder();
@@ -34,7 +35,6 @@ public class Mods {
 		        String[] delimitedFile = everything.split(", ");
 		        Mods = new String[delimitedFile.length];
 		        for(int i=0;i<delimitedFile.length;i++){
-		        	//System.out.println(delimitedFile[i]);
 		        	Mods[i]=delimitedFile[i];
 		        }
 		    } catch (IOException e) {

@@ -1,4 +1,4 @@
-package Main;
+package procyk.industries.mpbot;
 
 public class Message {
 	private String message;

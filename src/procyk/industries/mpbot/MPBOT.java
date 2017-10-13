@@ -1,19 +1,13 @@
-package Main;
+package procyk.industries.mpbot;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.Timer;
 
 import org.jibble.pircbot.PircBot;
 
 
 
 public class MPBOT extends PircBot{
-	public static String channel = "#minionprocyk";
-	Timer timers;
-	public MPBOT(){
-		this.setName("minionprocykbot");	
+	public MPBOT(String name){
+		this.setName(name);	
 	}
 	
 	public void onMessage(String channel, String sender, String login, String hostname, String message){
@@ -82,11 +76,7 @@ public class MPBOT extends PircBot{
 					sendMessage(channel, sender, command+" has been deleted");
 				}
 			}
-			if(sender.equals("minionprocyk")){
-				/*
-				 * I can write sender specific commands here...
-				 */
-			}
+
 		}
 		
 		/*
@@ -105,21 +95,22 @@ public class MPBOT extends PircBot{
 		}
 	}//end OnMessage
 	public void onOp(String channel,String sourceNick,String sourceLogin,String sourceHostname,String recipient){
-		if(channel.equalsIgnoreCase("#minionprocyk")){
-			sendMessage(channel, Messages.newOp + "*"+recipient+"*");			
-		}
+		
+		sendMessage(channel, Messages.newOp + "*"+recipient+"*");			
+		
 	}//end onOp
 	public void sendMessage(String channel, String sender, String message){
 		//preface the message to make it personable
 		String preface="";
-		if(sender.equals("minionprocyk")){
+		//assume the name of the master is the channel name without the #
+		if(sender.equals(channel.substring(1))){
 			preface = Messages.master;
 		}else if(Mods.isMod(sender)){
 			preface = Messages.chief+sender+". ";
 		}else{
 			preface = Messages.minion+sender+". ";
 		}
-		//do some other stuff before the message gets sent
+		//manage messages as a que with a timeout.
 		if(Messages.canSendMessage()){
 			Messages.AddRecentSentMessages(sender, message);
 			sendMessage(channel, preface+message);
