@@ -15,10 +15,13 @@ import java.util.HashMap;
  */
 public class Commands {
 	public static HashMap<String, String> commands;
-
+	private static String[] restrictedCommands;
+	
 	static
 	{
 		commands = new HashMap<String, String>();
+		restrictedCommands = new String[]{"!add","!delete","!edit","!commands",
+				"!recent","!test","!startTimer","!stopTimer","!quote"};
 		load(StaticVars.CommandsDirectoy, commands);
 	}
 
@@ -100,42 +103,7 @@ public class Commands {
 	 * as what's contained in the string 'command' variable then return true
 	 */
 	public static boolean commandExists(String command) {
-		String fileName = StaticVars.CommandsDirectoy;
-		try {
-
-			BufferedReader br = new BufferedReader(new FileReader(fileName));
-
-			StringBuilder sb = new StringBuilder();
-			String line = br.readLine();
-			
-			while (line != null) {
-				sb.append(line);
-				sb.append(System.lineSeparator());
-				line = br.readLine();
-			}
-			br.close();
-			//load the entire message into a normal string
-			String everything = sb.toString();
-
-			// split for windows platform only. '\r\n'
-			// use '\n' if used on a Unix system
-			//if you have one solid platform you can use everything.split(System.lineSeparator());
-			String[] delimitedFile = everything.split("\n");
-
-			for (int i = 0; i < delimitedFile.length; i++) {
-				String[] delimitedCommand = delimitedFile[i].split("=");
-				if (delimitedCommand[0].equals(command)) {
-					// System.out.println(command+" already exists");
-					return true;
-				}
-				// System.out.println(delimitedFile[i]);
-
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		System.out.println(command+" does not exist");
-		return false;
+		return commands.get(command)!=null;
 	}
 	public static boolean Delete(String command) {
 		//parse through the txt file of commands. find the command that the string matches
@@ -183,7 +151,21 @@ public class Commands {
 		}
 		return sbCommands.toString();
 	}
-
+	public static String listRestrictedCommands(){
+		StringBuilder sbCommands = new StringBuilder();
+		for(String command: restrictedCommands){
+			sbCommands.append(command+", ");
+		}
+		return sbCommands.toString();
+	}
+	public static boolean isRestricted(String command)
+	{
+		for(String s: restrictedCommands)
+		{
+			if(command.equals(s))return true;
+		}
+		return false;
+	}
 	public static void Update(String command, String message) {
 		Commands.Delete(command);
 		Commands.addCommand(message);

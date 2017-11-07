@@ -1,7 +1,13 @@
 package procyk.industries.mpbot;
+
+import java.io.IOException;
+
+import org.jibble.pircbot.IrcException;
+import org.jibble.pircbot.NickAlreadyInUseException;
+
 public class ConsoleMain{
 
-	public static void main(String[] args) throws Exception{
+	public static void main(String[] args){
 		if(args.length==8)
 		{
 			String ircServer=args[0];
@@ -27,7 +33,22 @@ public class ConsoleMain{
 			
 			MPBOT mpBot = new MPBOT(botName);
 			mpBot.setVerbose(true);
-			mpBot.connect(ircServer, port,oath);
+			try
+			{
+				mpBot.connect(ircServer, port,oath);
+			}
+			catch (NickAlreadyInUseException e)
+			{
+				e.printStackTrace();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			catch (IrcException e)
+			{
+				e.printStackTrace();
+			}
 			mpBot.joinChannel(channel);
 		}
 		else
@@ -40,5 +61,4 @@ public class ConsoleMain{
 			}
 		}
 	}
-
 }
